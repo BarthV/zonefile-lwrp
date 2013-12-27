@@ -1,4 +1,4 @@
-name             'zonefile-lwrp'
+name             'zonefile'
 maintainer       'Barthélemy Vessemont'
 maintainer_email ''
 license          'GNU GPL v3'
