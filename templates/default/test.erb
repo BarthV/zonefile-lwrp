@@ -6,18 +6,24 @@
 ; BIND data file for zone labs.photobox.com
 ;
 
-$TTL 22222
+$TTL 11001
 
 @	IN	SOA	demo.example.null. root.demo.example.null. (
 			     12		; Serial
-			 124212		; Refresh
-			  12421		; Retry
-			1242124		; Expire
-			  12421 )	; Negative Cache TTL
+			   9000		; Refresh
+			  22022		; Retry
+			 990099		; Expire
+			  44044 )	; Negative Cache TTL
 ;
 
 @	IN	NS	demo.example.null.
 @	IN	A	192.168.1.42
 
 test	IN	A	192.168.1.212
+demo	IN	A	192.168.1.121
 
+mailfront1	IN	MX 10	192.168.1.201
+mailfront2	IN	MX 20	192.168.1.202
+
+app1	IN CNAME	test
+app2	IN CNAME	demo
