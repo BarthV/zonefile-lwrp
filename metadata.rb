@@ -1,5 +1,5 @@
 name             'zonefile'
-maintainer       'Barthélemy Vessemont'
+maintainer       'Barthelemy Vessemont'
 maintainer_email ''
 license          'GNU GPL v3'
 description      'Some Chef LWRP to manage and edit SOA from bind zonefiles'
