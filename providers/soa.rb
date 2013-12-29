@@ -67,6 +67,7 @@ end
 
 action :create do
   if @current_resource.update_serial
+    Chef::Log.info("Creating or Updating #{@new_resource.name} zonefile SOA items")
     file @current_resource.name do
       content regen_soa
       backup false
@@ -74,6 +75,8 @@ action :create do
       group new_resource.group
       mode new_resource.mode
     end
+  else
+    Chef::Log.info("Not updating anything for #{@new_resource.name} zonefile")
   end
 end
 

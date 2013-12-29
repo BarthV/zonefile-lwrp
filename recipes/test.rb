@@ -1,5 +1,4 @@
-chef_gem 'zonefile'
-require 'zonefile'
+include_recipe 'zonefile::default'
 
 template '/tmp/db.zone.demo' do
   source 'test.erb'
@@ -12,7 +11,7 @@ zonefile_soa '/tmp/db.zone.demo' do
   soattl '77777' # override default value
   refresh '124212' # no change from template
 #  retrydelay "20m"
-  globalttl '1234567890'
-  origin 'aaaaaa.aaa.'
+  globalttl '1234567890' #override
+  origin 'foo.bar.'
 end
   
