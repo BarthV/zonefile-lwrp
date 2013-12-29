@@ -24,6 +24,6 @@ attribute :group, :kind_of => String, :default => 'root'
 attribute :mode, :kind_of => String, :default => '0644'
 
 # serial update option
-attribute :no_serial_udpdate, :kind_of => [TrueClass, FalseClass], :default => true
+attribute :no_serial_udpdate, :kind_of => [TrueClass, FalseClass], :default => false
 
 attr_accessor :update_serial

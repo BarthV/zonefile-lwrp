@@ -22,7 +22,7 @@ def regen_soa
   Zonefile.preserve_name(false)
   zf = Zonefile.from_file(@current_resource.name,@current_resource.origin)
 
-  zf.@ttl = '99999'
+  zf.instance_variable_set(:@ttl, @current_resource.globalttl)
 
   zf.soa[:primary] = @current_resource.nameserver
   zf.soa[:email] = @current_resource.contact
@@ -50,29 +50,6 @@ def load_current_resource
   @current_resource.origin(@new_resource.origin)
   @current_resource.globalttl(@new_resource.globalttl)
 
-  Chef::Log.info("
-#{@current_resource.nameserver}
-#{@current_resource.contact}
-#{@current_resource.soattl}
-#{@current_resource.refresh}
-#{@current_resource.retrydelay}
-#{@current_resource.expire}
-#{@current_resource.neg_cache_ttl}
-#{@current_resource.origin}
-#{@current_resource.globalttl}
-
-")
-
-  Chef::Log.info("
-test name = #{@current_resource.nameserver} == #{soa_from_file(:primary)} : #{@current_resource.nameserver == soa_from_file(:primary)}
-test mail = #{@current_resource.contact} == #{soa_from_file(:email)} : #{@current_resource.contact == soa_from_file(:email)}
-test soattl = #{@current_resource.soattl} == #{soa_from_file(:ttl)} : #{@current_resource.soattl == soa_from_file(:ttl)}
-test refresh = #{@current_resource.refresh} == #{soa_from_file(:refresh)} : #{@current_resource.refresh == soa_from_file(:refresh)}
-test retry = #{@current_resource.retrydelay} == #{soa_from_file(:retry)} : #{@current_resource.retrydelay == soa_from_file(:retry)}
-test ttl =  #{@current_resource.globalttl} == #{globalttl_from_file} : #{@current_resource.globalttl == globalttl_from_file}
-test origin =  #{@current_resource.origin} == #{origin_from_file} : #{@current_resource.origin == origin_from_file}
-")
-
   if @current_resource.nameserver == soa_from_file(:primary) and
   @current_resource.contact == soa_from_file(:email) and
   @current_resource.soattl == soa_from_file(:ttl) and
@@ -89,13 +66,6 @@ test origin =  #{@current_resource.origin} == #{origin_from_file} : #{@current_r
 end
 
 action :create do
-  Chef::Log.info("need to update serial : #{@current_resource.update_serial}
-")
-  Chef::Log.info("content of the file :
---
-#{regen_soa}
---")
-
   if @current_resource.update_serial
     file @current_resource.name do
       content regen_soa
