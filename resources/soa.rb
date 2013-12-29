@@ -7,8 +7,8 @@ actions :create, :force, :delete
 default_action :create
 
 # zonfile SOA attributes
-attribute :nameserver, :kind_of => String, :required => true, :default => node['fqdn']+'.'
-attribute :contact, :kind_of => String, :required => true, :default => 'root' + node['fqdn']+'.'
+attribute :nameserver, :kind_of => String, :default => node['fqdn']+'.'
+attribute :contact, :kind_of => String, :default => 'root' + node['fqdn']+'.'
 attribute :globalttl, :kind_of => String, :default => '4h'
 attribute :origin, :kind_of => String, :default => node['fqdn']+'.'
 attribute :soattl, :kind_of => String, :default => ''
