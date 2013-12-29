@@ -6,6 +6,8 @@
 ; BIND data file for zone labs.photobox.com
 ;
 
+$TTL 22222
+
 @	IN	SOA	demo.example.null. root.demo.example.null. (
 			     12		; Serial
 			 124212		; Refresh
@@ -14,7 +16,6 @@
 			  12421 )	; Negative Cache TTL
 ;
 
-$TTL	12421
 @	IN	NS	demo.example.null.
 @	IN	A	192.168.1.42
 

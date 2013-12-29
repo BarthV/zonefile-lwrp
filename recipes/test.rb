@@ -9,8 +9,10 @@ end
 zonefile_soa '/tmp/db.zone.demo' do
   nameserver 'foo.bar.'
   contact 'root.foo.bar.'
-#  ttl '77777' # override default value
-#  refresh '124212' # no change from template
-#  retry_delay "20m"
+  soattl '77777' # override default value
+  refresh '124212' # no change from template
+#  retrydelay "20m"
+  globalttl '1234567890'
+  origin 'aaaaaa.aaa.'
 end
   
