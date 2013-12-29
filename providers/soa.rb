@@ -22,7 +22,7 @@ def regen_soa
   Zonefile.preserve_name(false)
   zf = Zonefile.from_file(@current_resource.name,@current_resource.origin)
 
-  @ttl = '99999'
+  zf.@ttl = '99999'
 
   zf.soa[:primary] = @current_resource.nameserver
   zf.soa[:email] = @current_resource.contact
@@ -31,7 +31,9 @@ def regen_soa
   zf.soa[:retry] = @current_resource.retrydelay
   zf.soa[:expire] = @current_resource.expire
   zf.soa[:minimumTTL] = @current_resource.neg_cache_ttl
-  zf.new_serial
+  if !(@new_resource.no_serial_udpdate)
+    zf.new_serial
+  end
 
   return zf.output
 end
