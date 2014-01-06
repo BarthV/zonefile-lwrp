@@ -58,32 +58,24 @@ def load_current_resource
   @new_resource.origin.nil? ? @current_resource.origin(@new_resource.nameserver) : @current_resource.origin(@new_resource.origin) 
   @current_resource.globalttl(@new_resource.globalttl)
 
-  @current_resource.update_serial = true
+  @current_resource.update_needed = true
   
-  if @new_resource.no_serial_udpdate
-    @current_resource.update_serial = false
-  else
-    begin
-      if @current_resource.nameserver == soa_from_file(:primary) and
-      @current_resource.contact == soa_from_file(:email) and
-      @current_resource.soattl == soa_from_file(:ttl) and
-      @current_resource.refresh == soa_from_file(:refresh) and
-      @current_resource.retrydelay == soa_from_file(:retry) and
-      @current_resource.expire == soa_from_file(:expire) and
-      @current_resource.neg_cache_ttl == soa_from_file(:minimumTTL) and
-      @current_resource.origin == origin_from_file and
-      @current_resource.globalttl == globalttl_from_file
-        @current_resource.update_serial = false
-      end
-    rescue
-      @current_resource.update_serial = true
-    end
+  if @current_resource.nameserver == soa_from_file(:primary) and 
+  @current_resource.contact == soa_from_file(:email) and
+  @current_resource.soattl == soa_from_file(:ttl) and
+  @current_resource.refresh == soa_from_file(:refresh) and
+  @current_resource.retrydelay == soa_from_file(:retry) and
+  @current_resource.expire == soa_from_file(:expire) and
+  @current_resource.neg_cache_ttl == soa_from_file(:minimumTTL) and
+  @current_resource.origin == origin_from_file and
+  @current_resource.globalttl == globalttl_from_file
+    @current_resource.update_needed = false
   end
 end
 
 
 action :create do
-  if @current_resource.update_serial
+  if @current_resource.update_needed
     Chef::Log.info("Creating or Updating #{@new_resource.name} zonefile SOA items")
 
     file @current_resource.name do
