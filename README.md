@@ -20,14 +20,14 @@ Include the default recipe in your code to install zonefile gem dependency and b
 
 ## LWRP
 
-* `zonefile_soa` - configure SOA and global record for a specified zonefile. Can also create zonefile file.
+* `zonefile_soa` - configure SOA and global record for a specified zonefile. Can also create zonefile file. It keeps existing records.
 
 ### Actions
 
 - `:create` (default): create or bind modify zonefile SOA and global variables
   to the extracted directory path
 - `:force`: _not implemented yet_
-- `:delete`: _not implemented yet_
+- `:delete`: delete zonefile
 
 ### Attribute Parameters for :create
 
@@ -43,7 +43,7 @@ __File parameters__
 
 __Global zonefile parameters__
 
-- `:origin`: zonefile global $ORIGIN option (Default is `node['fqdn']`)
+- `:origin`: zonefile global $ORIGIN option (Default is using `nameserver` value or `node['fqdn']` if nameserver is not specified)
 - `:globalttl`: zonefile global $TTL option (Default is 4h)
 
 __SOA parameters__
@@ -81,7 +81,7 @@ __other__
 
 ## Test recipe
 
-`zonefile::test` recipe put once a zonefile in /tmp/ and modify it according to the example LWRP.
+`zonefile::test` : this recipe creates a zonefile in /tmp/ and modify it according to the example LWRP, it also creates another zonefile from scratch using default values.
 
 ## License and Author
 

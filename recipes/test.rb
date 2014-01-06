@@ -5,6 +5,7 @@ template '/tmp/db.zone.demo' do
   not_if { File.exists?('/tmp/db.zone.demo')}
 end
 
+# modifying existing file (pushed by template)
 zonefile_soa '/tmp/db.zone.demo' do
   nameserver 'foo.bar.'
   contact 'root.foo.bar.'
@@ -14,4 +15,11 @@ zonefile_soa '/tmp/db.zone.demo' do
   globalttl '1234567890' #override
   origin 'foo.bar.'
 end
-  
+
+# creating new file
+zonefile_soa '/tmp/db.test.local' do
+  nameserver 'test.local.'
+  contact 'root.test.local.'
+  globalttl '4h'
+end
+

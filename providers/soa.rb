@@ -14,13 +14,21 @@ def origin_from_file
 end
 
 def soa_from_file(field)
-  zf = Zonefile.from_file(@current_resource.name)
+  begin
+    zf = Zonefile.from_file(@current_resource.name)
+  rescue
+    return ""
+  end
   return zf.soa[field]
 end
 
 def regen_soa
   Zonefile.preserve_name(false)
-  zf = Zonefile.from_file(@current_resource.name,@current_resource.origin)
+  begin
+    zf = Zonefile.from_file(@current_resource.name,@current_resource.origin)
+  rescue
+    zf = Zonefile.new('',@current_resource.name,@current_resource.origin)
+  end
 
   zf.instance_variable_set(:@ttl, @current_resource.globalttl)
 
@@ -47,41 +55,56 @@ def load_current_resource
   @current_resource.retrydelay(@new_resource.retrydelay)
   @current_resource.expire(@new_resource.expire)
   @current_resource.neg_cache_ttl(@new_resource.neg_cache_ttl)
-  @current_resource.origin(@new_resource.origin)
+  @new_resource.origin.nil? ? @current_resource.origin(@new_resource.nameserver) : @current_resource.origin(@new_resource.origin) 
   @current_resource.globalttl(@new_resource.globalttl)
 
-  if @current_resource.nameserver == soa_from_file(:primary) and
-  @current_resource.contact == soa_from_file(:email) and
-  @current_resource.soattl == soa_from_file(:ttl) and
-  @current_resource.refresh == soa_from_file(:refresh) and
-  @current_resource.retrydelay == soa_from_file(:retry) and
-  @current_resource.expire == soa_from_file(:expire) and
-  @current_resource.neg_cache_ttl == soa_from_file(:minimumTTL) and
-  @current_resource.origin == origin_from_file and
-  @current_resource.globalttl == globalttl_from_file
+  @current_resource.update_serial = true
+  
+  if @new_resource.no_serial_udpdate
     @current_resource.update_serial = false
   else
-    @current_resource.update_serial = true
+    begin
+      if @current_resource.nameserver == soa_from_file(:primary) and
+      @current_resource.contact == soa_from_file(:email) and
+      @current_resource.soattl == soa_from_file(:ttl) and
+      @current_resource.refresh == soa_from_file(:refresh) and
+      @current_resource.retrydelay == soa_from_file(:retry) and
+      @current_resource.expire == soa_from_file(:expire) and
+      @current_resource.neg_cache_ttl == soa_from_file(:minimumTTL) and
+      @current_resource.origin == origin_from_file and
+      @current_resource.globalttl == globalttl_from_file
+        @current_resource.update_serial = false
+      end
+    rescue
+      @current_resource.update_serial = true
+    end
   end
 end
+
 
 action :create do
   if @current_resource.update_serial
     Chef::Log.info("Creating or Updating #{@new_resource.name} zonefile SOA items")
+
     file @current_resource.name do
-      content regen_soa
+      content regen_soa()
       backup false
       owner new_resource.user
       group new_resource.group
       mode new_resource.mode
+      action :create
     end
   else
-    Chef::Log.info("Not updating anything for #{@new_resource.name} zonefile")
+    Chef::Log.info("Not updating records for #{@new_resource.name} zonefile")
   end
 end
 
 action :delete do
-  #TODO
+  Chef::Log.info("Deleting #{@new_resource.name} zonefile")
+  file @current_resource.name do
+    backup false
+    action :delete
+  end
 end
 
 action :force do
