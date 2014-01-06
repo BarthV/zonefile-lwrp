@@ -12,9 +12,7 @@ This recipe depends on Chef 0.10.10 features, such as `chef_gem`.
 
 ## Usage
 
-Just add this cookbook in your project metadata file.
-
-Include the default recipe in your code to install zonefile gem dependency and bring LWRP to life :-).
+Just add this cookbook in your project metadata file to install zonefile gem dependency and bring LWRP to life :-).
 
 `include_recipe 'zonefile'`
 
