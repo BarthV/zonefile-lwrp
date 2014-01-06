@@ -24,8 +24,7 @@ Include the default recipe in your code to install zonefile gem dependency and b
 
 ### Actions
 
-- `:create` (default): create or bind modify zonefile SOA and global variables
-  to the extracted directory path
+- `:create` (default): create or modify bind zonefile, set SOA and global variables to specified values. No changes on other records are applied.
 - `:force`: _not implemented yet_
 - `:delete`: delete zonefile
 
