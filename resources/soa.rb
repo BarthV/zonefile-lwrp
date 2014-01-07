@@ -10,7 +10,7 @@ default_action :create
 attribute :nameserver, :kind_of => String, :default => node['fqdn']+'.'
 attribute :contact, :kind_of => String, :default => 'root' + node['fqdn']+'.'
 attribute :globalttl, :kind_of => String, :default => '4h'
-attribute :origin, :kind_of => String, :default => nil 
+attribute :origin, :kind_of => String, :default => nil
 attribute :soattl, :kind_of => String, :default => nil
 attribute :refresh, :kind_of => String, :default => '2h'
 attribute :retrydelay, :kind_of => String, :default => '30m'

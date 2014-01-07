@@ -70,7 +70,7 @@ def load_current_resource
   
   if @current_resource.nameserver == soa_from_file(:primary) and 
   @current_resource.contact == soa_from_file(:email) and
-  @current_resource.soattl == soa_from_file(:ttl) and
+  ( @current_resource.soattl == soa_from_file(:ttl) or current_resource.soattl.nil? ) and
   @current_resource.refresh == soa_from_file(:refresh) and
   @current_resource.retrydelay == soa_from_file(:retry) and
   @current_resource.expire == soa_from_file(:expire) and
@@ -79,24 +79,6 @@ def load_current_resource
   @current_resource.globalttl == globalttl_from_file
     @current_resource.update_needed = false
   end
-
-  puts "
-
-==== DEBUG ====
-nameserver = #{@current_resource.nameserver == soa_from_file(:primary)}
-contact = #{@current_resource.contact == soa_from_file(:email)}
-soattl = #{@current_resource.soattl == soa_from_file(:ttl)}
-refresh = #{@current_resource.refresh == soa_from_file(:refresh)}
-retrydelay = #{@current_resource.retrydelay == soa_from_file(:retry)}
-expire = #{@current_resource.expire == soa_from_file(:expire)}
-neg_cache_ttl = #{@current_resource.neg_cache_ttl == soa_from_file(:minimumTTL)}
-origin = #{@current_resource.origin == origin_from_file}
-globalttl = #{@current_resource.globalttl == globalttl_from_file}
-
-update_needed ? = #{@current_resource.update_needed}
-
-"
-
 end
 
 
