@@ -4,12 +4,20 @@
 #
 
 def globalttl_from_file
-  zf = Zonefile.from_file(@current_resource.name)
+  begin
+    zf = Zonefile.from_file(@current_resource.name)
+  rescue
+    return ""
+  end
   return zf.ttl
 end
 
 def origin_from_file
-  zf = Zonefile.from_file(@current_resource.name)
+  begin
+    zf = Zonefile.from_file(@current_resource.name)
+  rescue
+    return ""
+  end
   return zf.origin
 end
 
